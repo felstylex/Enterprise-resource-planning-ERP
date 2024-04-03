@@ -18,6 +18,7 @@ public class Client {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
+    private String cpf;
     private String adress;
     private String telephone;
     private String email;
