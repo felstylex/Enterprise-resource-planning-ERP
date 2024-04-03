@@ -19,7 +19,7 @@ public class Client {
     private Long id;
     private String name;
     private String cpf;
-    private String adress;
+    private String address;
     private String telephone;
     private String email;
 }
