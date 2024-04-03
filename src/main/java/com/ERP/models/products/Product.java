@@ -23,5 +23,5 @@ public class Product {
     private String description;
     private BigDecimal price;
     private int stock;
-    private String supplier_id;
+    private String supplierId;
 }
