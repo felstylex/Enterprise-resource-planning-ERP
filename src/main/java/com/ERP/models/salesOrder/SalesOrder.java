@@ -6,6 +6,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 @Entity(name="salesOders")
@@ -21,6 +22,7 @@ public class SalesOrder {
     private Long id;
     private String clientId;
     private LocalDate orderDate;
+    private BigDecimal totalPrice;
     @Enumerated(EnumType.STRING)
     private OrderStatus status;
 }
