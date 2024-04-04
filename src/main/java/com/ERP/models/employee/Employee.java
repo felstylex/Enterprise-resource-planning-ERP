@@ -6,6 +6,8 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.io.Serial;
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
@@ -15,7 +17,9 @@ import java.time.LocalDate;
 @Setter
 @AllArgsConstructor
 @EqualsAndHashCode(of = "id")
-public class Employee {
+public class Employee implements Serializable {
+    @Serial
+    private static final long serialVersionUID = 1L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,7 +27,7 @@ public class Employee {
     private String name;
     private String office;
     private String department;
-    private LocalDate admissionDate;
+    private LocalDate admission_date;
     private BigDecimal salary;
 
 }

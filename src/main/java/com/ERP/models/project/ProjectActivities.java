@@ -6,23 +6,27 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.io.Serial;
+import java.io.Serializable;
 import java.time.LocalDate;
 
-@Entity(name="projectActivities")
-@Table(name="projectActivities")
+@Entity(name="project_activities")
+@Table(name="project_activities")
 @Getter
 @Setter
 @AllArgsConstructor
 @EqualsAndHashCode(of = "id")
-public class ProjectActivities {
+public class ProjectActivities implements Serializable {
+    @Serial
+    private static final long serialVersionUID = 1L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String projectId;
+    private String project_id;
     private String name;
-    private LocalDate startDate;
-    private LocalDate endDate;
+    private LocalDate start_date;
+    private LocalDate end_date;
     @Enumerated(EnumType.STRING)
     private ProjectStatus status;
 }
