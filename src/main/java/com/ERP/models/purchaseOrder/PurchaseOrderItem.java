@@ -1,5 +1,6 @@
 package com.ERP.models.purchaseOrder;
 
+import com.ERP.models.products.Product;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
@@ -23,8 +24,15 @@ public class PurchaseOrderItem implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String purchase_order_id;
-    private String product_id;
+
+    @ManyToOne
+    @JoinColumn(name = "purchase_order_id")
+    private PurchaseOrder purchase_order;
+
+    @ManyToOne
+    @JoinColumn(name = "product_id")
+    private Product product;
+
     private int quantity;
     private BigDecimal unit_price;
 }

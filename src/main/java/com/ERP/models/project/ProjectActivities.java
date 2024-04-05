@@ -23,7 +23,9 @@ public class ProjectActivities implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String project_id;
+    @ManyToOne
+    @JoinColumn(name = "project_id")
+    private Project project;
     private String name;
     private LocalDate start_date;
     private LocalDate end_date;

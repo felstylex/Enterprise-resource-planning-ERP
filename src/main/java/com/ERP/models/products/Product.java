@@ -29,7 +29,7 @@ public class Product implements Serializable {
     private BigDecimal price;
     private int stock;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "supplier_id")
     private Supplier supplier;
 }

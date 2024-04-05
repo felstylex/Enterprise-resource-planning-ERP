@@ -1,5 +1,6 @@
 package com.ERP.models.salesOrder;
 
+import com.ERP.models.client.Client;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
@@ -10,6 +11,7 @@ import java.io.Serial;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.List;
 
 @Entity(name="sales_orders")
 @Table(name="sales_orders")
@@ -24,7 +26,14 @@ public class SalesOrder implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String client_id;
+
+    @ManyToOne
+    @JoinColumn(name = "client_id")
+    private Client client;
+
+    @OneToMany(mappedBy = "salesOrder", cascade = CascadeType.ALL)
+    private List<SalesOrderItem> items;
+
     private LocalDate order_date;
     private BigDecimal total_price;
     @Enumerated(EnumType.STRING)

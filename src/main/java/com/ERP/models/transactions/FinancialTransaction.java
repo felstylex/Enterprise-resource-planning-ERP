@@ -1,5 +1,7 @@
 package com.ERP.models.transactions;
 
+import com.ERP.models.client.Client;
+import com.ERP.models.supplier.Supplier;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
@@ -28,6 +30,12 @@ public class FinancialTransaction implements Serializable {
     private LocalDateTime date;
     @Enumerated(EnumType.STRING)
     private TransactionType type;
-    private String client_id;
-    private String supplier_id;
+
+    @ManyToOne
+    @JoinColumn(name = "client_id")
+    private Client client;
+
+    @ManyToOne
+    @JoinColumn(name = "supplier_id")
+    private Supplier supplier;
 }
