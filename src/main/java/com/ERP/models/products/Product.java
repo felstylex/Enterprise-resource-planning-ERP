@@ -1,5 +1,6 @@
 package com.ERP.models.products;
 
+import com.ERP.models.supplier.Supplier;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
@@ -27,5 +28,8 @@ public class Product implements Serializable {
     private String description;
     private BigDecimal price;
     private int stock;
-    private String supplier_id;
+
+    @OneToOne
+    @JoinColumn(name = "supplier_id")
+    private Supplier supplier;
 }
