@@ -39,4 +39,20 @@ public class ClientController {
                 .body("cliente não encontrado!"));
     }
 
+    @PutMapping("/client/{id}")
+    public ResponseEntity<Object> updateClient(@PathVariable(value = "id") Long id, @RequestBody ClientRecordDto clientRecordDto) {
+
+        Optional<Client> client = clientRepository.findById(id);
+
+        if(client.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("cliente não encontrado!");
+        }
+
+        var clientModel = client.get();
+        BeanUtils.copyProperties(clientRecordDto, clientModel);
+
+        return ResponseEntity.status(HttpStatus.OK).body(clientRepository.save(clientModel));
+
+    }
+
 }
