@@ -41,7 +41,6 @@ public class ClientController {
 
     @PutMapping("/client/{id}")
     public ResponseEntity<Object> updateClient(@PathVariable(value = "id") Long id, @RequestBody ClientRecordDto clientRecordDto) {
-
         Optional<Client> client = clientRepository.findById(id);
 
         if(client.isEmpty()) {
@@ -52,7 +51,19 @@ public class ClientController {
         BeanUtils.copyProperties(clientRecordDto, clientModel);
 
         return ResponseEntity.status(HttpStatus.OK).body(clientRepository.save(clientModel));
+    }
 
+    @DeleteMapping("/client/{id}")
+    public ResponseEntity<Object> deleteClient(@PathVariable(value = "id") Long id) {
+        Optional<Client> client = clientRepository.findById(id);
+
+        if(client.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("cliente não encontrado!");
+        }
+
+        clientRepository.delete(client.get());
+
+        return ResponseEntity.status(HttpStatus.OK).body("Deletado com sucesso!");
     }
 
 }
