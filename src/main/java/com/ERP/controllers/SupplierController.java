@@ -7,9 +7,10 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.Optional;
 
 @RestController
 public class SupplierController {
@@ -23,5 +24,19 @@ public class SupplierController {
         BeanUtils.copyProperties(supplierRecordDto, supplierModel);
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(supplierRepository.save(supplierModel));
+    }
+
+    @GetMapping("/supplier")
+    public ResponseEntity<List<Supplier>> getAllSuppliers() {
+        return ResponseEntity.status(HttpStatus.OK).body(supplierRepository.findAll());
+    }
+
+    @GetMapping("/supplier/{id}")
+    public ResponseEntity<Object> findSupplierById(@PathVariable(value = "id") Long id) {
+        Optional<Supplier> supplier = supplierRepository.findById(id);
+
+        return supplier.<ResponseEntity<Object>>map(value -> ResponseEntity.status(HttpStatus.OK)
+                .body(value)).orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body("Fornecedor não encontrado!"));
     }
 }

@@ -7,9 +7,10 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.Optional;
 
 @RestController
 public class SalesOrderController {
@@ -23,5 +24,19 @@ public class SalesOrderController {
         BeanUtils.copyProperties(salesOrderRecordDto, salesOrderModel);
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(salesOrderRepository.save(salesOrderModel));
+    }
+
+    @GetMapping("/sales-order")
+    public ResponseEntity<List<SalesOrder>> getAllSalesOrders() {
+        return ResponseEntity.status(HttpStatus.OK).body(salesOrderRepository.findAll());
+    }
+
+    @GetMapping("/sales-order/{id}")
+    public ResponseEntity<Object> findSalesOrderById(@PathVariable(value = "id") Long id) {
+        Optional<SalesOrder> salesOrder = salesOrderRepository.findById(id);
+
+        return salesOrder.<ResponseEntity<Object>>map(value -> ResponseEntity.status(HttpStatus.OK)
+                .body(value)).orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body("Pedido de venda não encontrado!"));
     }
 }

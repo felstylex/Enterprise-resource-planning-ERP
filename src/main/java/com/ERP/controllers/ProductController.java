@@ -7,9 +7,10 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.Optional;
 
 @RestController
 public class ProductController {
@@ -23,5 +24,19 @@ public class ProductController {
         BeanUtils.copyProperties(productRecordDto, productModel);
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(productRepository.save(productModel));
+    }
+
+    @GetMapping("/product")
+    public ResponseEntity<List<Product>> getAllProducts() {
+        return ResponseEntity.status(HttpStatus.OK).body(productRepository.findAll());
+    }
+
+    @GetMapping("/product/{id}")
+    public ResponseEntity<Object> findProductById(@PathVariable(value = "id") Long id) {
+        Optional<Product> product = productRepository.findById(id);
+
+        return product.<ResponseEntity<Object>>map(value -> ResponseEntity.status(HttpStatus.OK)
+                .body(value)).orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body("Produto não encontrado!"));
     }
 }

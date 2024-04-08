@@ -7,9 +7,10 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.Optional;
 
 @RestController
 public class ProjectController {
@@ -23,5 +24,19 @@ public class ProjectController {
         BeanUtils.copyProperties(projectRecordDto, projectModel);
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(projectRepository.save(projectModel));
+    }
+
+    @GetMapping("/project")
+    public ResponseEntity<List<Project>> getAllProjects() {
+        return ResponseEntity.status(HttpStatus.OK).body(projectRepository.findAll());
+    }
+
+    @GetMapping("/project/{id}")
+    public ResponseEntity<Object> findProjectById(@PathVariable(value = "id") Long id) {
+        Optional<Project> project = projectRepository.findById(id);
+
+        return project.<ResponseEntity<Object>>map(value -> ResponseEntity.status(HttpStatus.OK)
+                .body(value)).orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body("Projeto não encontrado!"));
     }
 }

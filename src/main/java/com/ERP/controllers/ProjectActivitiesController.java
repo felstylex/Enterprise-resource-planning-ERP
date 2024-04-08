@@ -7,9 +7,10 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.Optional;
 
 @RestController
 public class ProjectActivitiesController {
@@ -23,5 +24,19 @@ public class ProjectActivitiesController {
         BeanUtils.copyProperties(projectActivitiesRecordDto, projectActivityModel);
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(activitiesRepository.save(projectActivityModel));
+    }
+
+    @GetMapping("/project-activity")
+    public ResponseEntity<List<ProjectActivities>> getAllProjectActivities() {
+        return ResponseEntity.status(HttpStatus.OK).body(activitiesRepository.findAll());
+    }
+
+    @GetMapping("/project-activity/{id}")
+    public ResponseEntity<Object> findProjectActivityById(@PathVariable(value = "id") Long id) {
+        Optional<ProjectActivities> projectActivity = activitiesRepository.findById(id);
+
+        return projectActivity.<ResponseEntity<Object>>map(value -> ResponseEntity.status(HttpStatus.OK)
+                .body(value)).orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body("Atividade do projeto não encontrada!"));
     }
 }
