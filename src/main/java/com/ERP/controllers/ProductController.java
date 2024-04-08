@@ -53,4 +53,17 @@ public class ProductController {
 
         return ResponseEntity.status(HttpStatus.OK).body(productRepository.save(productModel));
     }
+
+    @DeleteMapping("/product/{id}")
+    public ResponseEntity<Object> deleteProduct(@PathVariable(value = "id") Long id) {
+        Optional<Product> product = productRepository.findById(id);
+
+        if(product.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Produto não encontrado!");
+        }
+
+        productRepository.delete(product.get());
+
+        return ResponseEntity.status(HttpStatus.OK).body("Deletado com sucesso!");
+    }
 }

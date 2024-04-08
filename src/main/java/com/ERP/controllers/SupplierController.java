@@ -52,4 +52,17 @@ public class SupplierController {
 
         return ResponseEntity.status(HttpStatus.OK).body(supplierRepository.save(supplierModel));
     }
+
+    @DeleteMapping("/supplier/{id}")
+    public ResponseEntity<Object> deleteSupplier(@PathVariable(value = "id") Long id) {
+        Optional<Supplier> supplier = supplierRepository.findById(id);
+
+        if(supplier.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Fornecedor não encontrado!");
+        }
+
+        supplierRepository.delete(supplier.get());
+
+        return ResponseEntity.status(HttpStatus.OK).body("Deletado com sucesso!");
+    }
 }

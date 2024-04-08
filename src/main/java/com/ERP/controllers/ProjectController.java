@@ -53,4 +53,18 @@ public class ProjectController {
 
         return ResponseEntity.status(HttpStatus.OK).body(projectRepository.save(projectModel));
     }
+
+    @DeleteMapping("/project/{id}")
+    public ResponseEntity<Object> deleteProject(@PathVariable(value = "id") Long id) {
+        Optional<Project> project = projectRepository.findById(id);
+
+        if(project.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Projeto não encontrado!");
+        }
+
+        projectRepository.delete(project.get());
+
+        return ResponseEntity.status(HttpStatus.OK).body("Deletado com sucesso!");
+    }
+
 }

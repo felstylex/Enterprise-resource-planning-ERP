@@ -53,4 +53,17 @@ public class SalesOrderItemController {
 
         return ResponseEntity.status(HttpStatus.OK).body(salesOrderItemRepository.save(salesOrderItemModel));
     }
+
+    @DeleteMapping("/sales-order-item/{id}")
+    public ResponseEntity<Object> deleteSalesOrderItem(@PathVariable(value = "id") Long id) {
+        Optional<SalesOrderItem> salesOrderItem = salesOrderItemRepository.findById(id);
+
+        if(salesOrderItem.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Item do pedido de venda não encontrado!");
+        }
+
+        salesOrderItemRepository.delete(salesOrderItem.get());
+
+        return ResponseEntity.status(HttpStatus.OK).body("Deletado com sucesso!");
+    }
 }

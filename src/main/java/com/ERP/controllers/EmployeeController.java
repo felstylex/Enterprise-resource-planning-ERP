@@ -54,4 +54,17 @@ public class EmployeeController {
         return ResponseEntity.status(HttpStatus.OK).body(employeeRepository.save(employeeModel));
     }
 
+    @DeleteMapping("/employee/{id}")
+    public ResponseEntity<Object> deleteEmployee(@PathVariable(value = "id") Long id) {
+        Optional<Employee> employee = employeeRepository.findById(id);
+
+        if(employee.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Funcionário não encontrado!");
+        }
+
+        employeeRepository.delete(employee.get());
+
+        return ResponseEntity.status(HttpStatus.OK).body("Deletado com sucesso!");
+    }
+
 }

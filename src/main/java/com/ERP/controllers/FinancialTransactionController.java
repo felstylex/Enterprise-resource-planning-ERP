@@ -54,4 +54,17 @@ public class FinancialTransactionController {
         return ResponseEntity.status(HttpStatus.OK).body(financialTransactionRepository.save(financialTransactionModel));
     }
 
+    @DeleteMapping("/financial-transaction/{id}")
+    public ResponseEntity<Object> deleteFinancialTransaction(@PathVariable(value = "id") Long id) {
+        Optional<FinancialTransaction> financialTransaction = financialTransactionRepository.findById(id);
+
+        if(financialTransaction.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Transação financeira não encontrada!");
+        }
+
+        financialTransactionRepository.delete(financialTransaction.get());
+
+        return ResponseEntity.status(HttpStatus.OK).body("Deletado com sucesso!");
+    }
+
 }

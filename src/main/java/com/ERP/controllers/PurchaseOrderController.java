@@ -53,4 +53,17 @@ public class PurchaseOrderController {
 
         return ResponseEntity.status(HttpStatus.OK).body(purchaseOrderRepository.save(purchaseOrderModel));
     }
+
+    @DeleteMapping("/purchase-order/{id}")
+    public ResponseEntity<Object> deletePurchaseOrder(@PathVariable(value = "id") Long id) {
+        Optional<PurchaseOrder> purchaseOrder = purchaseOrderRepository.findById(id);
+
+        if(purchaseOrder.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Pedido de compra não encontrado!");
+        }
+
+        purchaseOrderRepository.delete(purchaseOrder.get());
+
+        return ResponseEntity.status(HttpStatus.OK).body("Deletado com sucesso!");
+    }
 }
