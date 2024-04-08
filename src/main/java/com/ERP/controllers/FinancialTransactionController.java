@@ -40,4 +40,18 @@ public class FinancialTransactionController {
                 .body("Transação financeira não encontrada!"));
     }
 
+    @PutMapping("/financial-transaction/{id}")
+    public ResponseEntity<Object> updateFinancialTransaction(@PathVariable(value = "id") Long id, @RequestBody FinancialTransactionRecordDto financialTransactionRecordDto) {
+        Optional<FinancialTransaction> financialTransaction = financialTransactionRepository.findById(id);
+
+        if(financialTransaction.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Transação financeira não encontrada!");
+        }
+
+        var financialTransactionModel = financialTransaction.get();
+        BeanUtils.copyProperties(financialTransactionRecordDto, financialTransactionModel);
+
+        return ResponseEntity.status(HttpStatus.OK).body(financialTransactionRepository.save(financialTransactionModel));
+    }
+
 }

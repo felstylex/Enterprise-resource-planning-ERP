@@ -39,4 +39,18 @@ public class PurchaseOrderController {
                 .body(value)).orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND)
                 .body("Pedido de compra não encontrado!"));
     }
+
+    @PutMapping("/purchase-order/{id}")
+    public ResponseEntity<Object> updatePurchaseOrder(@PathVariable(value = "id") Long id, @RequestBody PurchaseOrderRecordDto purchaseOrderRecordDto) {
+        Optional<PurchaseOrder> purchaseOrder = purchaseOrderRepository.findById(id);
+
+        if(purchaseOrder.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Pedido de compra não encontrado!");
+        }
+
+        var purchaseOrderModel = purchaseOrder.get();
+        BeanUtils.copyProperties(purchaseOrderRecordDto, purchaseOrderModel);
+
+        return ResponseEntity.status(HttpStatus.OK).body(purchaseOrderRepository.save(purchaseOrderModel));
+    }
 }

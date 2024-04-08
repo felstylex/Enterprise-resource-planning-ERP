@@ -39,4 +39,18 @@ public class SalesOrderItemController {
                 .body(value)).orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND)
                 .body("Item do pedido de venda não encontrado!"));
     }
+
+    @PutMapping("/sales-order-item/{id}")
+    public ResponseEntity<Object> updateSalesOrderItem(@PathVariable(value = "id") Long id, @RequestBody SalesOrderItemRecordDto salesOrderItemRecordDto) {
+        Optional<SalesOrderItem> salesOrderItem = salesOrderItemRepository.findById(id);
+
+        if(salesOrderItem.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Item do pedido de venda não encontrado!");
+        }
+
+        var salesOrderItemModel = salesOrderItem.get();
+        BeanUtils.copyProperties(salesOrderItemRecordDto, salesOrderItemModel);
+
+        return ResponseEntity.status(HttpStatus.OK).body(salesOrderItemRepository.save(salesOrderItemModel));
+    }
 }

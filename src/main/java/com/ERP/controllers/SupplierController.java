@@ -39,4 +39,17 @@ public class SupplierController {
                 .body(value)).orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND)
                 .body("Fornecedor não encontrado!"));
     }
+    @PutMapping("/supplier/{id}")
+    public ResponseEntity<Object> updateSupplier(@PathVariable(value = "id") Long id, @RequestBody SupplierRecordDto supplierRecordDto) {
+        Optional<Supplier> supplier = supplierRepository.findById(id);
+
+        if(supplier.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Fornecedor não encontrado!");
+        }
+
+        var supplierModel = supplier.get();
+        BeanUtils.copyProperties(supplierRecordDto, supplierModel);
+
+        return ResponseEntity.status(HttpStatus.OK).body(supplierRepository.save(supplierModel));
+    }
 }

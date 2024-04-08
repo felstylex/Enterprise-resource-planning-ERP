@@ -39,4 +39,18 @@ public class ProductController {
                 .body(value)).orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND)
                 .body("Produto não encontrado!"));
     }
+
+    @PutMapping("/product/{id}")
+    public ResponseEntity<Object> updateProduct(@PathVariable(value = "id") Long id, @RequestBody ProductRecordDto productRecordDto) {
+        Optional<Product> product = productRepository.findById(id);
+
+        if(product.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Produto não encontrado!");
+        }
+
+        var productModel = product.get();
+        BeanUtils.copyProperties(productRecordDto, productModel);
+
+        return ResponseEntity.status(HttpStatus.OK).body(productRepository.save(productModel));
+    }
 }

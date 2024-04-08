@@ -39,4 +39,19 @@ public class EmployeeController {
                 .body(value)).orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND)
                 .body("Funcionário não encontrado!"));
     }
+
+    @PutMapping("/employee/{id}")
+    public ResponseEntity<Object> updateEmployee(@PathVariable(value = "id") Long id, @RequestBody EmployeeRecordDto employeeRecordDto) {
+        Optional<Employee> employee = employeeRepository.findById(id);
+
+        if(employee.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Funcionário não encontrado!");
+        }
+
+        var employeeModel = employee.get();
+        BeanUtils.copyProperties(employeeRecordDto, employeeModel);
+
+        return ResponseEntity.status(HttpStatus.OK).body(employeeRepository.save(employeeModel));
+    }
+
 }

@@ -39,4 +39,18 @@ public class ProjectController {
                 .body(value)).orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND)
                 .body("Projeto não encontrado!"));
     }
+
+    @PutMapping("/project/{id}")
+    public ResponseEntity<Object> updateProject(@PathVariable(value = "id") Long id, @RequestBody ProjectRecordDto projectRecordDto) {
+        Optional<Project> project = projectRepository.findById(id);
+
+        if(project.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Projeto não encontrado!");
+        }
+
+        var projectModel = project.get();
+        BeanUtils.copyProperties(projectRecordDto, projectModel);
+
+        return ResponseEntity.status(HttpStatus.OK).body(projectRepository.save(projectModel));
+    }
 }
