@@ -3,6 +3,7 @@ package com.ERP.controllers;
 import com.ERP.dtos.FinancialTransactionRecordDto;
 import com.ERP.models.transactions.FinancialTransaction;
 import com.ERP.repositories.FinancialTransactionRepository;
+import jakarta.validation.Valid;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -19,7 +20,7 @@ public class FinancialTransactionController {
     FinancialTransactionRepository financialTransactionRepository;
 
     @PostMapping("/transaction")
-    public ResponseEntity<FinancialTransaction> saveTransaction(@RequestBody FinancialTransactionRecordDto transactionRecordDto) {
+    public ResponseEntity<FinancialTransaction> saveTransaction(@RequestBody @Valid FinancialTransactionRecordDto transactionRecordDto) {
         var transactionModel = new FinancialTransaction();
         BeanUtils.copyProperties(transactionRecordDto, transactionModel);
         return ResponseEntity.status(HttpStatus.CREATED)
@@ -41,7 +42,7 @@ public class FinancialTransactionController {
     }
 
     @PutMapping("/financial-transaction/{id}")
-    public ResponseEntity<Object> updateFinancialTransaction(@PathVariable(value = "id") Long id, @RequestBody FinancialTransactionRecordDto financialTransactionRecordDto) {
+    public ResponseEntity<Object> updateFinancialTransaction(@PathVariable(value = "id") Long id, @RequestBody @Valid FinancialTransactionRecordDto financialTransactionRecordDto) {
         Optional<FinancialTransaction> financialTransaction = financialTransactionRepository.findById(id);
 
         if(financialTransaction.isEmpty()) {

@@ -3,6 +3,7 @@ package com.ERP.controllers;
 import com.ERP.dtos.ProjectRecordDto;
 import com.ERP.models.project.Project;
 import com.ERP.repositories.ProjectRepository;
+import jakarta.validation.Valid;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -19,7 +20,7 @@ public class ProjectController {
     ProjectRepository projectRepository;
 
     @PostMapping("/project")
-    public ResponseEntity<Project> saveProject(@RequestBody ProjectRecordDto projectRecordDto) {
+    public ResponseEntity<Project> saveProject(@RequestBody @Valid ProjectRecordDto projectRecordDto) {
         var projectModel = new Project();
         BeanUtils.copyProperties(projectRecordDto, projectModel);
         return ResponseEntity.status(HttpStatus.CREATED)
@@ -41,7 +42,7 @@ public class ProjectController {
     }
 
     @PutMapping("/project/{id}")
-    public ResponseEntity<Object> updateProject(@PathVariable(value = "id") Long id, @RequestBody ProjectRecordDto projectRecordDto) {
+    public ResponseEntity<Object> updateProject(@PathVariable(value = "id") Long id, @RequestBody @Valid ProjectRecordDto projectRecordDto) {
         Optional<Project> project = projectRepository.findById(id);
 
         if(project.isEmpty()) {

@@ -3,6 +3,7 @@ package com.ERP.controllers;
 import com.ERP.dtos.PurchaseOrderRecordDto;
 import com.ERP.models.purchaseOrder.PurchaseOrder;
 import com.ERP.repositories.PurchaseOrderRepository;
+import jakarta.validation.Valid;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -19,7 +20,7 @@ public class PurchaseOrderController {
     PurchaseOrderRepository purchaseOrderRepository;
 
     @PostMapping("/purchase-order")
-    public ResponseEntity<PurchaseOrder> savePurchaseOrder(@RequestBody PurchaseOrderRecordDto purchaseOrderRecordDto) {
+    public ResponseEntity<PurchaseOrder> savePurchaseOrder(@RequestBody @Valid PurchaseOrderRecordDto purchaseOrderRecordDto) {
         var purchaseOrderModel = new PurchaseOrder();
         BeanUtils.copyProperties(purchaseOrderRecordDto, purchaseOrderModel);
         return ResponseEntity.status(HttpStatus.CREATED)
@@ -41,7 +42,7 @@ public class PurchaseOrderController {
     }
 
     @PutMapping("/purchase-order/{id}")
-    public ResponseEntity<Object> updatePurchaseOrder(@PathVariable(value = "id") Long id, @RequestBody PurchaseOrderRecordDto purchaseOrderRecordDto) {
+    public ResponseEntity<Object> updatePurchaseOrder(@PathVariable(value = "id") Long id, @RequestBody @Valid PurchaseOrderRecordDto purchaseOrderRecordDto) {
         Optional<PurchaseOrder> purchaseOrder = purchaseOrderRepository.findById(id);
 
         if(purchaseOrder.isEmpty()) {

@@ -3,6 +3,7 @@ package com.ERP.controllers;
 import com.ERP.dtos.ProductRecordDto;
 import com.ERP.models.products.Product;
 import com.ERP.repositories.ProductRepository;
+import jakarta.validation.Valid;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -19,7 +20,7 @@ public class ProductController {
     ProductRepository productRepository;
 
     @PostMapping("/product")
-    public ResponseEntity<Product> saveProduct(@RequestBody ProductRecordDto productRecordDto) {
+    public ResponseEntity<Product> saveProduct(@RequestBody @Valid ProductRecordDto productRecordDto) {
         var productModel = new Product();
         BeanUtils.copyProperties(productRecordDto, productModel);
         return ResponseEntity.status(HttpStatus.CREATED)
@@ -41,7 +42,7 @@ public class ProductController {
     }
 
     @PutMapping("/product/{id}")
-    public ResponseEntity<Object> updateProduct(@PathVariable(value = "id") Long id, @RequestBody ProductRecordDto productRecordDto) {
+    public ResponseEntity<Object> updateProduct(@PathVariable(value = "id") Long id, @RequestBody @Valid ProductRecordDto productRecordDto) {
         Optional<Product> product = productRepository.findById(id);
 
         if(product.isEmpty()) {

@@ -3,6 +3,7 @@ package com.ERP.controllers;
 import com.ERP.dtos.SalesOrderItemRecordDto;
 import com.ERP.models.salesOrder.SalesOrderItem;
 import com.ERP.repositories.SalesOrderItemRepository;
+import jakarta.validation.Valid;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -19,7 +20,7 @@ public class SalesOrderItemController {
     SalesOrderItemRepository salesOrderItemRepository;
 
     @PostMapping("/sales-order-item")
-    public ResponseEntity<SalesOrderItem> saveSalesOrderItem(@RequestBody SalesOrderItemRecordDto salesOrderItemRecordDto) {
+    public ResponseEntity<SalesOrderItem> saveSalesOrderItem(@RequestBody @Valid SalesOrderItemRecordDto salesOrderItemRecordDto) {
         var salesOrderItemModel = new SalesOrderItem();
         BeanUtils.copyProperties(salesOrderItemRecordDto, salesOrderItemModel);
         return ResponseEntity.status(HttpStatus.CREATED)
@@ -41,7 +42,7 @@ public class SalesOrderItemController {
     }
 
     @PutMapping("/sales-order-item/{id}")
-    public ResponseEntity<Object> updateSalesOrderItem(@PathVariable(value = "id") Long id, @RequestBody SalesOrderItemRecordDto salesOrderItemRecordDto) {
+    public ResponseEntity<Object> updateSalesOrderItem(@PathVariable(value = "id") Long id, @RequestBody @Valid SalesOrderItemRecordDto salesOrderItemRecordDto) {
         Optional<SalesOrderItem> salesOrderItem = salesOrderItemRepository.findById(id);
 
         if(salesOrderItem.isEmpty()) {

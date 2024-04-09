@@ -3,6 +3,7 @@ package com.ERP.controllers;
 import com.ERP.dtos.PurchaseOrderItemRecordDto;
 import com.ERP.models.purchaseOrder.PurchaseOrderItem;
 import com.ERP.repositories.PurchaseOrderItemRepository;
+import jakarta.validation.Valid;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -19,7 +20,7 @@ public class PurchaseOrderItemController {
     PurchaseOrderItemRepository purchaseOrderItemRepository;
 
     @PostMapping("/purchase-order-item")
-    public ResponseEntity<PurchaseOrderItem> savePurchaseOrderItem(@RequestBody PurchaseOrderItemRecordDto purchaseOrderItemRecordDto) {
+    public ResponseEntity<PurchaseOrderItem> savePurchaseOrderItem(@RequestBody @Valid PurchaseOrderItemRecordDto purchaseOrderItemRecordDto) {
         var purchaseOrderItemModel = new PurchaseOrderItem();
         BeanUtils.copyProperties(purchaseOrderItemRecordDto, purchaseOrderItemModel);
         return ResponseEntity.status(HttpStatus.CREATED)
@@ -41,7 +42,7 @@ public class PurchaseOrderItemController {
     }
 
     @PutMapping("/purchase-order-item/{id}")
-    public ResponseEntity<Object> updatePurchaseOrderItem(@PathVariable(value = "id") Long id, @RequestBody PurchaseOrderItemRecordDto purchaseOrderItemRecordDto) {
+    public ResponseEntity<Object> updatePurchaseOrderItem(@PathVariable(value = "id") Long id, @RequestBody @Valid PurchaseOrderItemRecordDto purchaseOrderItemRecordDto) {
         Optional<PurchaseOrderItem> purchaseOrderItem = purchaseOrderItemRepository.findById(id);
 
         if(purchaseOrderItem.isEmpty()) {

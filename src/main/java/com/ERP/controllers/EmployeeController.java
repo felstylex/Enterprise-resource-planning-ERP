@@ -3,6 +3,7 @@ package com.ERP.controllers;
 import com.ERP.dtos.EmployeeRecordDto;
 import com.ERP.models.employee.Employee;
 import com.ERP.repositories.EmployeeRepository;
+import jakarta.validation.Valid;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -19,7 +20,7 @@ public class EmployeeController {
     EmployeeRepository employeeRepository;
 
     @PostMapping("/employee")
-    public ResponseEntity<Employee> saveEmployee(@RequestBody EmployeeRecordDto employeeRecordDto) {
+    public ResponseEntity<Employee> saveEmployee(@RequestBody @Valid EmployeeRecordDto employeeRecordDto) {
         var employeeModel = new Employee();
         BeanUtils.copyProperties(employeeRecordDto, employeeModel);
         return ResponseEntity.status(HttpStatus.CREATED)
@@ -41,7 +42,7 @@ public class EmployeeController {
     }
 
     @PutMapping("/employee/{id}")
-    public ResponseEntity<Object> updateEmployee(@PathVariable(value = "id") Long id, @RequestBody EmployeeRecordDto employeeRecordDto) {
+    public ResponseEntity<Object> updateEmployee(@PathVariable(value = "id") Long id, @RequestBody @Valid EmployeeRecordDto employeeRecordDto) {
         Optional<Employee> employee = employeeRepository.findById(id);
 
         if(employee.isEmpty()) {

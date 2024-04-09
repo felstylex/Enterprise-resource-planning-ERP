@@ -3,6 +3,7 @@ package com.ERP.controllers;
 import com.ERP.dtos.SupplierRecordDto;
 import com.ERP.models.supplier.Supplier;
 import com.ERP.repositories.SupplierRepository;
+import jakarta.validation.Valid;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -19,7 +20,7 @@ public class SupplierController {
     SupplierRepository supplierRepository;
 
     @PostMapping("/supplier")
-    public ResponseEntity<Supplier> saveSupplier(@RequestBody SupplierRecordDto supplierRecordDto) {
+    public ResponseEntity<Supplier> saveSupplier(@RequestBody @Valid SupplierRecordDto supplierRecordDto) {
         var supplierModel = new Supplier();
         BeanUtils.copyProperties(supplierRecordDto, supplierModel);
         return ResponseEntity.status(HttpStatus.CREATED)
@@ -40,7 +41,7 @@ public class SupplierController {
                 .body("Fornecedor não encontrado!"));
     }
     @PutMapping("/supplier/{id}")
-    public ResponseEntity<Object> updateSupplier(@PathVariable(value = "id") Long id, @RequestBody SupplierRecordDto supplierRecordDto) {
+    public ResponseEntity<Object> updateSupplier(@PathVariable(value = "id") Long id, @RequestBody @Valid SupplierRecordDto supplierRecordDto) {
         Optional<Supplier> supplier = supplierRepository.findById(id);
 
         if(supplier.isEmpty()) {

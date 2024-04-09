@@ -3,6 +3,7 @@ package com.ERP.controllers;
 import com.ERP.dtos.ClientRecordDto;
 import com.ERP.models.client.Client;
 import com.ERP.repositories.ClientRepository;
+import jakarta.validation.Valid;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -18,7 +19,7 @@ public class ClientController {
     ClientRepository clientRepository;
 
     @PostMapping("/client")
-    public ResponseEntity<Client> saveClient(@RequestBody ClientRecordDto clientRecordDto) {
+    public ResponseEntity<Client> saveClient(@RequestBody @Valid ClientRecordDto clientRecordDto) {
         var clientModel = new Client();
         BeanUtils.copyProperties(clientRecordDto, clientModel);
         return ResponseEntity.status(HttpStatus.CREATED)
@@ -40,7 +41,7 @@ public class ClientController {
     }
 
     @PutMapping("/client/{id}")
-    public ResponseEntity<Object> updateClient(@PathVariable(value = "id") Long id, @RequestBody ClientRecordDto clientRecordDto) {
+    public ResponseEntity<Object> updateClient(@PathVariable(value = "id") Long id, @RequestBody @Valid ClientRecordDto clientRecordDto) {
         Optional<Client> client = clientRepository.findById(id);
 
         if(client.isEmpty()) {

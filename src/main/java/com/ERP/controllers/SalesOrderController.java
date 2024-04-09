@@ -3,6 +3,7 @@ package com.ERP.controllers;
 import com.ERP.dtos.SalesOrderRecordDto;
 import com.ERP.models.salesOrder.SalesOrder;
 import com.ERP.repositories.SalesOrderRepository;
+import jakarta.validation.Valid;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -19,7 +20,7 @@ public class SalesOrderController {
     SalesOrderRepository salesOrderRepository;
 
     @PostMapping("/sales-order")
-    public ResponseEntity<SalesOrder> saveSalesOrder(@RequestBody SalesOrderRecordDto salesOrderRecordDto) {
+    public ResponseEntity<SalesOrder> saveSalesOrder(@RequestBody @Valid SalesOrderRecordDto salesOrderRecordDto) {
         var salesOrderModel = new SalesOrder();
         BeanUtils.copyProperties(salesOrderRecordDto, salesOrderModel);
         return ResponseEntity.status(HttpStatus.CREATED)
@@ -41,7 +42,7 @@ public class SalesOrderController {
     }
 
     @PutMapping("/sales-order/{id}")
-    public ResponseEntity<Object> updateSalesOrder(@PathVariable(value = "id") Long id, @RequestBody SalesOrderRecordDto salesOrderRecordDto) {
+    public ResponseEntity<Object> updateSalesOrder(@PathVariable(value = "id") Long id, @RequestBody @Valid SalesOrderRecordDto salesOrderRecordDto) {
         Optional<SalesOrder> salesOrder = salesOrderRepository.findById(id);
 
         if(salesOrder.isEmpty()) {
