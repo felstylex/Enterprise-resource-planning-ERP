@@ -1,5 +1,6 @@
 package com.ERP.models.salesOrder;
 
+import com.ERP.interfaces.Order;
 import com.ERP.models.client.Client;
 import jakarta.persistence.*;
 import lombok.*;
@@ -17,7 +18,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode(of = "id")
-public class SalesOrder implements Serializable {
+public class SalesOrder implements Serializable, Order {
     @Serial
     private static final long serialVersionUID = 1L;
 
@@ -36,4 +37,18 @@ public class SalesOrder implements Serializable {
     private BigDecimal total_price;
     @Enumerated(EnumType.STRING)
     private OrderStatus status;
+
+    @Override
+    public BigDecimal calculateTotalPrice() {
+        BigDecimal totalPrice = BigDecimal.ZERO;
+
+        if(items != null) {
+            for(SalesOrderItem item: items) {
+                BigDecimal itemPrice = item.getUnit_price().multiply(BigDecimal.valueOf(item.getQuantity()));
+                totalPrice = totalPrice.add(itemPrice);
+            }
+        }
+
+        return totalPrice;
+    }
 }
