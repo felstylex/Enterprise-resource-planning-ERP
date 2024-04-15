@@ -5,8 +5,8 @@ spring:
     url: jdbc:postgresql://localhost:5432/ERP
     username: postgres
   jpa:
-    database-platform: org.hibernate.dialect.PostgreSQLDialect
-    properties:
-      hibernate:
-        format_sql: true
-    show-sql: true
+    hibernate:
+      ddl-auto: create
+      properties:
+        hibernate:
+          dialect: org.hibernate.dialect.PostgreSQLDialect

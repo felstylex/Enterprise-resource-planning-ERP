@@ -3,6 +3,7 @@ package com.ERP.controllers;
 import com.ERP.dtos.SalesOrderRecordDto;
 import com.ERP.models.salesOrder.SalesOrder;
 import com.ERP.repositories.SalesOrderRepository;
+import com.ERP.services.CalculationService;
 import jakarta.validation.Valid;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
@@ -19,10 +21,17 @@ public class SalesOrderController {
     @Autowired
     SalesOrderRepository salesOrderRepository;
 
+    @Autowired
+    CalculationService calculationService;
+
     @PostMapping("/sales-order")
     public ResponseEntity<SalesOrder> saveSalesOrder(@RequestBody @Valid SalesOrderRecordDto salesOrderRecordDto) {
         var salesOrderModel = new SalesOrder();
         BeanUtils.copyProperties(salesOrderRecordDto, salesOrderModel);
+
+        BigDecimal totalPrice = calculationService.calculateTotalPrice(salesOrderModel);
+        salesOrderModel.setTotal_price(totalPrice);
+        
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(salesOrderRepository.save(salesOrderModel));
     }

@@ -3,6 +3,7 @@ package com.ERP.controllers;
 import com.ERP.dtos.PurchaseOrderRecordDto;
 import com.ERP.models.purchaseOrder.PurchaseOrder;
 import com.ERP.repositories.PurchaseOrderRepository;
+import com.ERP.services.CalculationService;
 import jakarta.validation.Valid;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
@@ -19,10 +21,17 @@ public class PurchaseOrderController {
     @Autowired
     PurchaseOrderRepository purchaseOrderRepository;
 
+    @Autowired
+    CalculationService calculationService;
+
     @PostMapping("/purchase-order")
     public ResponseEntity<PurchaseOrder> savePurchaseOrder(@RequestBody @Valid PurchaseOrderRecordDto purchaseOrderRecordDto) {
         var purchaseOrderModel = new PurchaseOrder();
         BeanUtils.copyProperties(purchaseOrderRecordDto, purchaseOrderModel);
+
+        BigDecimal totalPrice = calculationService.calculateTotalPrice(purchaseOrderModel);
+        purchaseOrderModel.setTotal_price(totalPrice);
+
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(purchaseOrderRepository.save(purchaseOrderModel));
     }
