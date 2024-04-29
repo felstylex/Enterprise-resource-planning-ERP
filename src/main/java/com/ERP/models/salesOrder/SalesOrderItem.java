@@ -1,6 +1,8 @@
 package com.ERP.models.salesOrder;
 
 import com.ERP.models.products.Product;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -25,6 +27,7 @@ public class SalesOrderItem implements Serializable {
 
     @ManyToOne
     @JoinColumn(name = "sales_order_id")
+    @JsonBackReference
     private SalesOrder salesOrder;
 
     @ManyToOne

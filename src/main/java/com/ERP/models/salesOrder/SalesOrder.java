@@ -2,6 +2,8 @@ package com.ERP.models.salesOrder;
 
 import com.ERP.interfaces.Order;
 import com.ERP.models.client.Client;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -31,6 +33,7 @@ public class SalesOrder implements Serializable, Order {
     private Client client;
 
     @OneToMany(mappedBy = "salesOrder", cascade = CascadeType.ALL)
+    @JsonManagedReference
     private List<SalesOrderItem> items;
 
     private LocalDate order_date;

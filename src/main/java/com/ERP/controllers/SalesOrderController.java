@@ -61,6 +61,9 @@ public class SalesOrderController {
         var salesOrderModel = salesOrder.get();
         BeanUtils.copyProperties(salesOrderRecordDto, salesOrderModel);
 
+        BigDecimal totalPrice = calculationService.calculateTotalPrice(salesOrderModel);
+        salesOrderModel.setTotal_price(totalPrice);
+
         return ResponseEntity.status(HttpStatus.OK).body(salesOrderRepository.save(salesOrderModel));
     }
 
