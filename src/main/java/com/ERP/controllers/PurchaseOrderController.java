@@ -2,6 +2,7 @@ package com.ERP.controllers;
 
 import com.ERP.dtos.PurchaseOrderRecordDto;
 import com.ERP.models.purchaseOrder.PurchaseOrder;
+import com.ERP.models.purchaseOrder.PurchaseOrderItem;
 import com.ERP.repositories.PurchaseOrderRepository;
 import com.ERP.services.CalculationService;
 import jakarta.validation.Valid;
@@ -60,6 +61,9 @@ public class PurchaseOrderController {
 
         var purchaseOrderModel = purchaseOrder.get();
         BeanUtils.copyProperties(purchaseOrderRecordDto, purchaseOrderModel);
+
+        BigDecimal totalPrice = calculationService.calculateTotalPrice(purchaseOrderModel);
+        purchaseOrderModel.setTotal_price(totalPrice);
 
         return ResponseEntity.status(HttpStatus.OK).body(purchaseOrderRepository.save(purchaseOrderModel));
     }

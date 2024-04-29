@@ -1,6 +1,7 @@
 package com.ERP.controllers;
 
 import com.ERP.dtos.PurchaseOrderItemRecordDto;
+import com.ERP.models.purchaseOrder.PurchaseOrder;
 import com.ERP.models.purchaseOrder.PurchaseOrderItem;
 import com.ERP.repositories.PurchaseOrderItemRepository;
 import jakarta.validation.Valid;
@@ -20,7 +21,7 @@ public class PurchaseOrderItemController {
     PurchaseOrderItemRepository purchaseOrderItemRepository;
 
     @PostMapping("/purchase-order-item")
-    public ResponseEntity<PurchaseOrderItem> savePurchaseOrderItem(@RequestBody @Valid PurchaseOrderItemRecordDto purchaseOrderItemRecordDto) {
+    public ResponseEntity<PurchaseOrderItem> savePurchaseOrderItem(@RequestBody PurchaseOrderItemRecordDto purchaseOrderItemRecordDto) {
         var purchaseOrderItemModel = new PurchaseOrderItem();
         BeanUtils.copyProperties(purchaseOrderItemRecordDto, purchaseOrderItemModel);
         return ResponseEntity.status(HttpStatus.CREATED)

@@ -1,8 +1,9 @@
 package com.ERP.models.purchaseOrder;
 
 import com.ERP.interfaces.Order;
-import com.ERP.models.salesOrder.SalesOrderItem;
 import com.ERP.models.supplier.Supplier;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -31,6 +32,7 @@ public class PurchaseOrder implements Serializable, Order {
     private Supplier supplier;
 
     @OneToMany(mappedBy = "purchaseOrder", cascade = CascadeType.ALL)
+    @JsonManagedReference
     private List<PurchaseOrderItem> items;
 
     private LocalDate purchase_date;
@@ -51,5 +53,4 @@ public class PurchaseOrder implements Serializable, Order {
         }
         return totalPrice;
     }
-
 }

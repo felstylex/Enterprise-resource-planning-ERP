@@ -1,6 +1,9 @@
 package com.ERP.models.purchaseOrder;
 
 import com.ERP.models.products.Product;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -24,13 +27,15 @@ public class PurchaseOrderItem implements Serializable {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "purchase_order_id")
-    private PurchaseOrder purchaseOrder;
-
-    @ManyToOne
     @JoinColumn(name = "product_id")
     private Product product;
 
+    @ManyToOne
+    @JoinColumn(name = "purchase_order_id")
+    @JsonBackReference
+    private PurchaseOrder purchaseOrder;
+    
     private int quantity;
     private BigDecimal unit_price;
+
 }
